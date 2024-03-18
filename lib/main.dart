@@ -19,17 +19,20 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _qtdPessoas = 0;
   String _mensagem = "Há vagas, pode entrar!";
-
+  static int _qtdMaxima = 25;
   void _atualizarPessoas(int quantidade){
     setState(() {
       _qtdPessoas+= quantidade;
-      if(_qtdPessoas >= 15) {
-        _qtdPessoas = 15;
+      if(_qtdPessoas >= _qtdMaxima) {
+        _qtdPessoas = _qtdMaxima;
         _mensagem = "Não há vagas";
       }
       else if (_qtdPessoas <= 0){
         _qtdPessoas = 0;
         _mensagem = "Não tem ninguém, corre pra pegar o melhor lugar!";
+      }
+      else if(_qtdPessoas == _qtdMaxima-1){
+        _mensagem = "Há somente 1 vaga, corre!";
       }
       else{
         _mensagem = "Há vagas, pode entrar!";
@@ -41,19 +44,34 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
+        /*Image.asset(
+          "imagens/restaurant.jpg",
+        ), */
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
             Text(
               "Pessoas: $_qtdPessoas",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 48,color: Colors.white, fontWeight: FontWeight.bold, inherit:false),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(4),
+                  child: ElevatedButton(
+                    child: Text(
+                        "+5",
+                        style: TextStyle(fontSize: 32, color: Colors.black)
+                    ),
+                    onPressed:  (){
+                      _atualizarPessoas(5);
+                    },
+                  )
+                ),
+                Padding(
+                  padding: EdgeInsets.all(4),
                   child: ElevatedButton(
                     child: Text(
                         "+1",
@@ -65,7 +83,7 @@ class _HomeState extends State<Home> {
                   )
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(4),
                   child: ElevatedButton(
                     child: Text(
                         "-1",
@@ -75,12 +93,24 @@ class _HomeState extends State<Home> {
                       _atualizarPessoas(-1);
                     },
                   )
-                )
+                ),
+                Padding(
+                  padding: EdgeInsets.all(4),
+                  child: ElevatedButton(
+                    child: Text(
+                        "-5",
+                        style: TextStyle(fontSize: 32, color: Colors.black)
+                    ),
+                    onPressed:  (){
+                      _atualizarPessoas(-5);
+                    },
+                  )
+                ),
               ]
             ),
             Text(
               _mensagem,
-              style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic, fontSize: 30)
+              style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic, fontSize: 30, inherit: false)
             )
           ],
         )
